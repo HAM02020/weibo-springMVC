@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfs.dao.AccessTokenDao">
+    <resultMap id="map" type="com.mfs.entity.AccessToken">
+
+        <association property="access_token" javaType="String" column="access_token" >
+            <result column="access_token" property="access_token" jdbcType="VARCHAR"/>
+        </association>
+        <association property="expires_in" javaType="String" column="access_token" >
+            <result column="expires_in" property="expires_in" jdbcType="VARCHAR"/>
+        </association>
+        <association property="uid" javaType="String" column="uid" >
+            <result column="uid" property="uid" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <select id="queryByUId" resultMap="map" parameterType="String">
+        <!-- 具体的sql -->
+        SELECT
+		*
+        FROM
+        AccessToken
+        WHERE
+        uid = #{uid}
+    </select>
+
+    <select id="queryAll" resultMap="map">
+		SELECT
+			*
+		FROM
+        AccessToken
+		ORDER BY
+			uid
+		LIMIT #{offset}, #{limit}
+	</select>
+
+    <insert id="insert" parameterType="com.mfs.entity.AccessToken">
+
+            INSERT INTO AccessToken(uid,expires_in,access_token)
+            VALUES (#{uid},#{expires_in},#{access_token})
+
+
+    </insert>
+
+    <update id="update" parameterType="AccessToken" >
+        UPDATE AccessToken
+        <set>
+            <if test="uid != null">
+                uid = #{uid},
+            </if>
+
+            <if test="expires_in != null">
+                expires_in = #{expires_in},
+            </if>
+            <if test="access_token != null">
+                access_token = #{access_token}
+            </if>
+        </set>
+        WHERE uid = #{uid}
+    </update>
+</mapper>

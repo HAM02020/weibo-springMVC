@@ -5,6 +5,9 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.mfs.dao"/>
+
     <!-- 配置整合mybatis过程 -->
     <!-- 1.配置数据库相关参数properties的属性：${url} -->
     <context:property-placeholder location="classpath:jdbc.properties" />
@@ -74,4 +77,6 @@
         <!-- 给出需要扫描Dao接口包 -->
         <property name="basePackage" value="com.mfs.dao" />
     </bean>
+
+
 </beans>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfs.dao.UserDao">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <resultMap id="map" type="com.mfs.entity.User">
+
+        <result column="idstr" property="idstr" jdbcType="VARCHAR" javaType="String"/>
+
+        <result column="screen_name" property="screen_name" jdbcType="VARCHAR" javaType="String"/>
+
+        <result column="profile_image_url" property="profile_image_url" jdbcType="VARCHAR" javaType="String"/>
+
+        <result column="friends_count" property="friends_count" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="followers_count" property="followers_count" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="statuses_count" property="statuses_count" jdbcType="INTEGER" javaType="Integer"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="map" parameterType="String">
+        <!-- 具体的sql -->
+        SELECT * FROM User WHERE idstr=#{idstr}
+    </select>
+
+    <select id="queryAll" resultMap="map">
+        SELECT * FROM User
+        ORDER BY idstr
+        LIMIT #{offset}, #{limit}
+	</select>
+
+    <insert id="insert" parameterType="User">
+        INSERT INTO User(idstr,screen_name,profile_image_url,friends_count,followers_count,statuses_count)
+        VALUES (#{idstr},#{screen_name},#{profile_image_url},#{friends_count},#{followers_count},#{statuses_count})
+    </insert>
+
+    <update id="update" parameterType="User">
+        UPDATE User
+        <set>
+            <if test="idstr != null">
+                idstr = #{idstr},
+            </if>
+
+            <if test="screen_name != null">
+                screen_name = #{screen_name},
+            </if>
+            <if test="profile_image_url != null">
+                profile_image_url = #{profile_image_url},
+            </if>
+            <if test="friends_count != null">
+                friends_count = #{friends_count},
+            </if>
+            <if test="followers_count != null">
+                followers_count = #{followers_count},
+            </if>
+            <if test="statuses_count != null">
+                statuses_count = #{statuses_count}
+            </if>
+        </set>
+        WHERE idstr = #{idstr}
+    </update>
+
+</mapper>

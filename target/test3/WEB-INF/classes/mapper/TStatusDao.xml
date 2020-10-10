@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfs.dao.TStatusDao">
+    <resultMap id="map" type="com.mfs.entity.TStatus">
+
+        <result column="userId" property="userId" jdbcType="BIGINT" javaType="Long"/>
+
+        <result column="statusId" property="statusId" jdbcType="BIGINT" javaType="Long"/>
+
+        <result typeHandler="com.mfs.tools.MyBlobTypeHandler" property="jsonStr" column="jsonStr"/>
+
+        <result column="creatTime" property="creatTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+
+    </resultMap>
+
+    <select id="queryById" resultMap="map" parameterType="long">
+        SELECT statusId,userId,jsonStr,creatTime FROM Status
+        WHERE statusId = #{statusId}
+    </select>
+
+
+
+    <select id="loadStatus" resultMap="map">
+        SELECT statusId,userId,jsonStr,creatTime FROM Status
+        WHERE userId = #{userId}
+
+        <if test="sinceId>0">
+        AND statusId &gt; #{sinceId}
+        </if>
+
+        <if test="maxId>0">
+            AND statusId &lt; #{maxId}
+        </if>
+
+        ORDER BY statusId DESC  LIMIT 20
+    </select>
+
+    <insert id="insertStatus" >
+
+        INSERT INTO Status(userId,statusId,jsonStr)
+        VALUES (#{userId},#{statusId},#{jsonStr})
+
+
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE Status
+        <set>
+            <if test="userId != null">
+                userId = #{userId},
+            </if>
+
+            <if test="statusId != null">
+                statusId = #{statusId},
+            </if>
+            <if test="jsonStr != null">
+                jsonStr = #{jsonStr}
+            </if>
+        </set>
+        WHERE statusId = #{statusId}
+
+    </update>
+</mapper>
